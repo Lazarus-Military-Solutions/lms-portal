@@ -1,34 +1,147 @@
 @import "tailwindcss";
 
 :root {
-  --background: #020617;
-  --foreground: #f8fafc;
+  --background: #060810;
+  --foreground: #e2e8f0;
+  --lms-green: #6b8f3f;
+  --lms-amber: #c8920a;
+  --lms-red: #b91c1c;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-mono: var(--font-jetbrains-mono), var(--font-geist-mono), monospace;
 }
 
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
-html {
-  scroll-behavior: smooth;
-}
+html { scroll-behavior: smooth; }
 
 body {
   margin: 0;
   min-height: 100vh;
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+a { color: inherit; text-decoration: none; }
+
+/* ── Blast door CSS keyframes ── */
+
+@keyframes cursor-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+@keyframes warning-flash {
+  0%, 100% { opacity: 0.15; box-shadow: none; }
+  50% { opacity: 1; box-shadow: 0 0 18px rgba(200, 100, 0, 0.9); }
+}
+
+@keyframes warning-flash-slow {
+  0%, 100% { opacity: 0.2; }
+  50% { opacity: 0.8; }
+}
+
+@keyframes door-open-left {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-101%); }
+}
+
+@keyframes door-open-right {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(101%); }
+}
+
+/* lock bolts retract away from the seam */
+@keyframes lock-retract-l {
+  0%   { transform: scaleX(1); }
+  100% { transform: scaleX(0); }
+}
+
+@keyframes lock-retract-r {
+  0%   { transform: scaleX(1); }
+  100% { transform: scaleX(0); }
+}
+
+@keyframes piston-extend {
+  0%   { height: 32%; }
+  100% { height: 62%; }
+}
+
+@keyframes interior-reveal {
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes screen-shake {
+  0%, 100% { transform: translate(0, 0); }
+  10%  { transform: translate(-6px, 3px); }
+  20%  { transform: translate(6px, -3px); }
+  30%  { transform: translate(-5px, 2px); }
+  40%  { transform: translate(5px, -2px); }
+  55%  { transform: translate(-3px, 1px); }
+  70%  { transform: translate(3px, -1px); }
+  85%  { transform: translate(-1px, 0); }
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scanline-drift {
+  from { background-position: 0 0; }
+  to   { background-position: 0 100vh; }
+}
+
+/* ── Utility animation classes ── */
+
+.animate-cursor-blink  { animation: cursor-blink 0.8s step-end infinite; }
+.animate-warning-flash { animation: warning-flash 1.0s ease-in-out infinite; }
+.animate-warning-slow  { animation: warning-flash-slow 2.5s ease-in-out infinite; }
+
+.animate-door-open-left  { animation: door-open-left  3.0s cubic-bezier(0.35, 0, 0.25, 1) forwards; }
+.animate-door-open-right { animation: door-open-right 3.0s cubic-bezier(0.35, 0, 0.25, 1) forwards; }
+
+.animate-lock-l { animation: lock-retract-l 0.55s ease-in forwards; transform-origin: right center; }
+.animate-lock-r { animation: lock-retract-r 0.55s ease-in forwards; transform-origin: left  center; }
+
+.animate-piston-extend { animation: piston-extend 0.9s ease-out forwards; }
+.animate-interior      { animation: interior-reveal 1.2s ease-in forwards; }
+.animate-screen-shake  { animation: screen-shake 0.55s ease-in-out; }
+.animate-fade-up       { animation: fade-up 0.25s ease-out forwards; }
+
+/* ── Scanlines overlay ── */
+.scanlines {
+  background-image: repeating-linear-gradient(
+    0deg,
+    transparent 0px,
+    transparent 2px,
+    rgba(0, 0, 0, 0.07) 2px,
+    rgba(0, 0, 0, 0.07) 3px
+  );
+  pointer-events: none;
+}
+
+/* ── Custom scrollbar ── */
+::-webkit-scrollbar          { width: 5px; }
+::-webkit-scrollbar-track    { background: #0a0d14; }
+::-webkit-scrollbar-thumb    { background: #2a2e38; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #3a3e4a; }
+
+/* ── Reduced-motion overrides ── */
+@media (prefers-reduced-motion: reduce) {
+  .animate-door-open-left,
+  .animate-door-open-right,
+  .animate-lock-l,
+  .animate-lock-r,
+  .animate-piston-extend,
+  .animate-screen-shake,
+  .animate-warning-flash,
+  .animate-warning-slow {
+    animation-duration: 0.01ms !important;
+  }
 }
