@@ -1,0 +1,7 @@
+- Never create backend logic unless explicitly requested
+- Always use TypeScript
+- Always use reusable components
+- Follow LMS design system strictly
+- Do not hardcode UI styles outside Tailwind config
+- Keep architecture modular and scalable
+- Prioritize maintainability over speed

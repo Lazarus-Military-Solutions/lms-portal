@@ -1,0 +1,2 @@
+# Drop blast-door-open.mp3 here to enable the door sound effect.
+# The app references /sounds/blast-door-open.mp3 and silently skips it if the file is absent.
