@@ -1,161 +1,161 @@
-export type Rank =
-  | 'Recruit' | 'Private' | 'Specialist' | 'Corporal'
-  | 'Sergeant' | 'Staff Sergeant' | 'Master Sergeant'
-  | 'Lieutenant' | 'Captain' | 'Major' | 'Lt. Colonel' | 'Colonel';
-
-export type PersonnelStatus = 'ACTIVE' | 'DEPLOYED' | 'LEAVE' | 'TRAINING' | 'INACTIVE' | 'DECEASED';
-
-export type ClassificationLevel =
-  | 'PUBLIC' | 'INTERNAL' | 'RESTRICTED' | 'CONFIDENTIAL' | 'CLASSIFIED' | 'TOP SECRET';
+// LMS Personnel Database
+export type PersonnelStatus = 'ACTIVE' | 'DEPLOYED' | 'TRAINING' | 'LEAVE' | 'MEDICAL' | 'ARCHIVED';
+export type PersonnelRank = 'Recruit' | 'Specialist' | 'Sergeant' | 'Lieutenant' | 'Captain' | 'Major' | 'Colonel' | 'General';
+export type ClearanceLevel = 'INTERNAL' | 'RESTRICTED' | 'CONFIDENTIAL' | 'SECRET' | 'TOP SECRET';
 
 export interface PersonnelRecord {
   serviceNumber: string;
-  name: string;
-  callsign: string;
-  rank: Rank;
+  firstName: string;
+  lastName: string;
+  callsign?: string;
+  rank: PersonnelRank;
   component: string;
   position: string;
   status: PersonnelStatus;
   dateJoined: string;
+  clearanceLevel: ClearanceLevel;
   qualifications: string[];
-  deployments: string[];
-  operations: string[];
+  deployments: number;
+  operations: number;
   awards: string[];
-  disciplinaryRecord: string[];
-  classification: ClassificationLevel;
+  disciplinaryRecords: number;
 }
 
-export const personnel: PersonnelRecord[] = [
+export const PERSONNEL: PersonnelRecord[] = [
   {
-    serviceNumber: 'LMS-00001',
-    name: 'Powell, Haider A.',
-    callsign: 'SHEPHERD',
+    serviceNumber: 'LMS-001',
+    firstName: 'James',
+    lastName: 'Anderson',
+    callsign: 'CIPHER',
     rank: 'Colonel',
     component: 'Operations Command',
-    position: 'Chief Executive Officer',
+    position: 'Chief Operations Officer',
     status: 'ACTIVE',
-    dateJoined: '2019-03-12',
-    qualifications: ['Special Operations', 'Executive Leadership', 'Strategic Planning', 'Crisis Management', 'Joint Operations'],
-    deployments: ['South Iraq 2022', 'Central Africa 2020', 'Eastern Europe 2021'],
-    operations: ['OPERATION LONG RUN', 'OPERATION IRON VEIL', 'OPERATION DAWNBREAKER'],
-    awards: ['Distinguished Service Medal', 'Combat Action Badge', 'Meritorious Service Medal', 'Executive Leadership Commendation'],
-    disciplinaryRecord: [],
-    classification: 'RESTRICTED',
+    dateJoined: '2019-03-15',
+    clearanceLevel: 'TOP SECRET',
+    qualifications: ['CQB', 'Leadership', 'Tactical Planning', 'Field Operations'],
+    deployments: 12,
+    operations: 47,
+    awards: ['Distinguished Service Medal', 'Commendation Medal'],
+    disciplinaryRecords: 0,
   },
   {
-    serviceNumber: 'LMS-00047',
-    name: 'Torres, Selena M.',
-    callsign: 'VIPER',
+    serviceNumber: 'LMS-002',
+    firstName: 'Maria',
+    lastName: 'Carter',
+    callsign: 'PHOENIX',
     rank: 'Major',
     component: 'Field Operations Group',
-    position: 'Operations Team Leader',
+    position: 'Field Operations Commander',
     status: 'DEPLOYED',
-    dateJoined: '2025-01-08',
-    qualifications: ['CQB', 'Field Operations', 'Leadership', 'SERE', 'Combat Driving'],
-    deployments: ['Eastern Europe 2027', 'North Africa 2026'],
-    operations: ['OPERATION DAWNBREAKER', 'OPERATION GHOST TIDE', 'OPERATION IRON VEIL'],
-    awards: ['Field Operations Commendation', 'Combat Action Badge'],
-    disciplinaryRecord: [],
-    classification: 'INTERNAL',
+    dateJoined: '2020-07-22',
+    clearanceLevel: 'SECRET',
+    qualifications: ['CQB', 'Field Tactics', 'Team Leadership', 'Weapons Training'],
+    deployments: 8,
+    operations: 34,
+    awards: ['Commendation Medal'],
+    disciplinaryRecords: 0,
   },
   {
-    serviceNumber: 'LMS-00112',
-    name: 'Nakamura, Kenji R.',
-    callsign: 'RAPTOR',
+    serviceNumber: 'LMS-003',
+    firstName: 'Robert',
+    lastName: 'Williams',
+    callsign: 'STORM',
     rank: 'Captain',
     component: 'Aviation Wing',
-    position: 'Lead Pilot',
+    position: 'Pilot',
     status: 'ACTIVE',
-    dateJoined: '2025-06-14',
-    qualifications: ['Combat Aviation', 'Search & Rescue', 'Rotary Wing', 'Fixed Wing', 'Night Operations'],
-    deployments: ['Central Asia 2026', 'Eastern Europe 2027'],
-    operations: ['OPERATION IRON VEIL', 'OPERATION SWIFT EAGLE'],
-    awards: ['Aviation Service Medal'],
-    disciplinaryRecord: [],
-    classification: 'INTERNAL',
+    dateJoined: '2021-02-10',
+    clearanceLevel: 'CONFIDENTIAL',
+    qualifications: ['Fixed Wing', 'Rotary Wing', 'Combat Flying', 'Emergency Procedures'],
+    deployments: 5,
+    operations: 22,
+    awards: [],
+    disciplinaryRecords: 0,
   },
   {
-    serviceNumber: 'LMS-00198',
-    name: 'Okafor, Chidinma L.',
+    serviceNumber: 'LMS-004',
+    firstName: 'Sarah',
+    lastName: 'Torres',
     callsign: 'MEDIC',
-    rank: 'Lieutenant',
-    component: 'Medical Logistics',
-    position: 'Senior Medical Officer',
-    status: 'ACTIVE',
-    dateJoined: '2026-02-20',
-    qualifications: ['Combat Medicine', 'Trauma Surgery', 'Medical Logistics', 'Triage Protocol', 'Pharmaceutical Management'],
-    deployments: ['North Africa 2027'],
-    operations: ['OPERATION GHOST TIDE'],
-    awards: ['Medical Service Commendation'],
-    disciplinaryRecord: [],
-    classification: 'INTERNAL',
-  },
-  {
-    serviceNumber: 'LMS-00341',
-    name: 'Reeves, Marcus D.',
-    callsign: 'SHADOW',
     rank: 'Sergeant',
-    component: 'Special Warfare',
-    position: 'Reconnaissance Specialist',
-    status: 'ACTIVE',
-    dateJoined: '2025-11-03',
-    qualifications: ['Special Reconnaissance', 'CQB', 'HALO/HAHO', 'SERE', 'Counter-Intelligence', 'Advanced Marksmanship'],
-    deployments: ['Eastern Europe 2027'],
-    operations: ['OPERATION DAWNBREAKER'],
-    awards: [],
-    disciplinaryRecord: ['Minor insubordination – 2026-08-14. Resolved with formal reprimand.'],
-    classification: 'RESTRICTED',
-  },
-  {
-    serviceNumber: 'LMS-00512',
-    name: 'Alvarez, Diego C.',
-    callsign: 'MULE',
-    rank: 'Specialist',
     component: 'Medical Logistics',
-    position: 'Logistics Coordinator',
-    status: 'TRAINING',
-    dateJoined: '2027-04-01',
-    qualifications: ['Logistics Management', 'Medical Supply Chain'],
-    deployments: [],
-    operations: [],
+    position: 'Medical Officer',
+    status: 'ACTIVE',
+    dateJoined: '2020-11-03',
+    clearanceLevel: 'RESTRICTED',
+    qualifications: ['Trauma Medicine', 'Field Triage', 'Emergency Response'],
+    deployments: 6,
+    operations: 28,
     awards: [],
-    disciplinaryRecord: [],
-    classification: 'PUBLIC',
+    disciplinaryRecords: 0,
   },
   {
-    serviceNumber: 'LMS-00603',
-    name: 'Zhao, Wei',
-    callsign: 'ORACLE',
-    rank: 'Staff Sergeant',
-    component: 'Operations Command',
+    serviceNumber: 'LMS-005',
+    firstName: 'David',
+    lastName: 'Mitchell',
+    callsign: 'HAMMER',
+    rank: 'Sergeant',
+    component: 'Field Operations Group',
+    position: 'Team Lead',
+    status: 'TRAINING',
+    dateJoined: '2022-05-18',
+    clearanceLevel: 'INTERNAL',
+    qualifications: ['CQB', 'Weapons Training', 'Team Coordination'],
+    deployments: 3,
+    operations: 12,
+    awards: [],
+    disciplinaryRecords: 1,
+  },
+  {
+    serviceNumber: 'LMS-006',
+    firstName: 'Emily',
+    lastName: 'Richardson',
+    callsign: 'INTEL',
+    rank: 'Captain',
+    component: 'Intelligence Division',
     position: 'Intelligence Analyst',
     status: 'ACTIVE',
-    dateJoined: '2026-07-22',
-    qualifications: ['Intelligence Analysis', 'SIGINT', 'Database Operations', 'Threat Assessment', 'Geospatial Analysis'],
-    deployments: ['Eastern Europe 2027'],
-    operations: ['OPERATION IRON VEIL', 'OPERATION DAWNBREAKER'],
-    awards: ['Intelligence Service Medal'],
-    disciplinaryRecord: [],
-    classification: 'CLASSIFIED',
+    dateJoined: '2019-09-12',
+    clearanceLevel: 'TOP SECRET',
+    qualifications: ['Data Analysis', 'Threat Assessment', 'Network Security', 'Cryptography'],
+    deployments: 2,
+    operations: 18,
+    awards: ['Commendation Medal'],
+    disciplinaryRecords: 0,
   },
   {
-    serviceNumber: 'LMS-00718',
-    name: 'Kowalski, Anna V.',
-    callsign: 'FROST',
-    rank: 'Staff Sergeant',
-    component: 'Field Operations Group',
-    position: 'Breacher / Demolitions',
-    status: 'LEAVE',
-    dateJoined: '2025-09-15',
-    qualifications: ['Demolitions', 'Breaching', 'CQB', 'EOD Fundamentals'],
-    deployments: ['North Africa 2026', 'Eastern Europe 2027'],
-    operations: ['OPERATION IRON VEIL', 'OPERATION DAWNBREAKER'],
-    awards: ['Combat Action Badge'],
-    disciplinaryRecord: [],
-    classification: 'INTERNAL',
+    serviceNumber: 'LMS-007',
+    firstName: 'Marcus',
+    lastName: 'Bennett',
+    callsign: 'RECON',
+    rank: 'Specialist',
+    component: 'Special Warfare',
+    position: 'Scout',
+    status: 'DEPLOYED',
+    dateJoined: '2021-08-25',
+    clearanceLevel: 'CONFIDENTIAL',
+    qualifications: ['Surveillance', 'Reconnaissance', 'CQB', 'Evasion'],
+    deployments: 4,
+    operations: 16,
+    awards: [],
+    disciplinaryRecords: 0,
+  },
+  {
+    serviceNumber: 'LMS-008',
+    firstName: 'Jessica',
+    lastName: 'Santos',
+    callsign: 'GUARDIAN',
+    rank: 'Lieutenant',
+    component: 'Medical Logistics',
+    position: 'Medical Commander',
+    status: 'ACTIVE',
+    dateJoined: '2018-04-06',
+    clearanceLevel: 'SECRET',
+    qualifications: ['Trauma Surgery', 'Medical Leadership', 'Emergency Response'],
+    deployments: 7,
+    operations: 31,
+    awards: ['Distinguished Service Medal'],
+    disciplinaryRecords: 0,
   },
 ];
-
-export const totalPersonnelCount = 1618;
-export const deployedCount = 341;
-export const trainingCount = 214;

@@ -2,7 +2,9 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+import Link from 'next/link';
 import { SystemStatus } from './SystemStatus';
+import { BrandLogo } from '@/components/BrandLogo';
 
 type Module = 'overview' | 'personnel' | 'operations' | 'intel' | 'training';
 
@@ -24,13 +26,11 @@ export function DatabaseDashboard() {
     >
       {/* top bar */}
       <div
-        className="flex h-12 flex-shrink-0 items-center justify-between border-b border-slate-800/50 px-6"
+        className="flex h-12 shrink-0 items-center justify-between border-b border-slate-800/50 px-6"
         style={{ background: '#080b13' }}
       >
         <div className="flex items-center gap-4">
-          <div className="flex h-5 w-5 items-center justify-center rounded-sm bg-[#556B2F]">
-            <span className="text-[8px] font-black text-white">LM</span>
-          </div>
+          <BrandLogo href="/portal" imageClassName="h-6 w-auto" />
           <span className="text-[11px] tracking-[0.3em] text-slate-300 uppercase">
             Lazarus Military Solutions
           </span>
@@ -55,7 +55,7 @@ export function DatabaseDashboard() {
       <div className="flex flex-1 overflow-hidden">
         {/* left nav */}
         <div
-          className="flex w-48 flex-shrink-0 flex-col border-r border-slate-800/50 py-4"
+          className="flex w-48 shrink-0 flex-col border-r border-slate-800/50 py-4"
           style={{ background: '#070a10' }}
         >
           <p className="mb-3 px-4 text-[7px] tracking-[0.45em] text-slate-600 uppercase">Modules</p>
@@ -76,10 +76,30 @@ export function DatabaseDashboard() {
             </button>
           ))}
 
+          <div className="mt-4 border-t border-slate-800/50 pt-4">
+            <p className="mb-2 px-4 text-[7px] tracking-[0.45em] text-slate-600 uppercase">Full Database</p>
+            {[
+              { href: '/personnel',  label: 'Personnel DB'  },
+              { href: '/operations', label: 'Operations'     },
+              { href: '/units',      label: 'Components'     },
+              { href: '/training',   label: 'Training'       },
+              { href: '/documents',  label: 'Documents'      },
+            ].map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="flex items-center gap-2 border-l-2 border-transparent px-4 py-1.5 text-[10px] tracking-wide text-slate-600 uppercase transition-colors hover:border-slate-700 hover:text-slate-400"
+              >
+                <span className="text-[6px] text-slate-700">â†’</span>
+                {link.label}
+              </Link>
+            ))}
+          </div>
+
           <div className="mt-auto border-t border-slate-800/50 px-4 pt-4">
             <p className="text-[7px] tracking-[0.3em] text-slate-700 uppercase">Operator</p>
             <p className="mt-1 text-[10px] text-slate-400">ANDERSON, J.</p>
-            <p className="text-[8px] text-slate-600">Colonel · CMD</p>
+            <p className="text-[8px] text-slate-600">Colonel Â· CMD</p>
           </div>
         </div>
 
@@ -101,7 +121,7 @@ export function DatabaseDashboard() {
 
         {/* right sidebar */}
         <div
-          className="w-56 flex-shrink-0 border-l border-slate-800/50 p-4"
+          className="w-56 shrink-0 border-l border-slate-800/50 p-4"
           style={{ background: '#070a10' }}
         >
           <SystemStatus />
@@ -111,7 +131,7 @@ export function DatabaseDashboard() {
   );
 }
 
-/* ── panel header helper ── */
+/* â”€â”€ panel header helper â”€â”€ */
 function PanelHeader({ eyebrow, title }: { eyebrow: string; title: string }) {
   return (
     <div className="mb-6">
@@ -121,7 +141,7 @@ function PanelHeader({ eyebrow, title }: { eyebrow: string; title: string }) {
   );
 }
 
-/* ── stat card helper ── */
+/* â”€â”€ stat card helper â”€â”€ */
 function StatCard({ label, value, delta }: { label: string; value: string; delta: string }) {
   const positive = delta.startsWith('+') && delta !== '+0';
   return (
@@ -135,7 +155,7 @@ function StatCard({ label, value, delta }: { label: string; value: string; delta
   );
 }
 
-/* ── Overview ── */
+/* â”€â”€ Overview â”€â”€ */
 function OverviewPanel() {
   const stats = [
     { label: 'Active Personnel', value: '247', delta: '+3'  },
@@ -147,7 +167,7 @@ function OverviewPanel() {
   const log = [
     { time: '08:42', level: 'INFO',  event: 'Operation DAWNBREAKER status updated'     },
     { time: '07:15', level: 'AUDIT', event: 'Personnel record LMS-047 modified'        },
-    { time: '06:30', level: 'ALERT', event: 'Intel feed sync — 4 new entries'          },
+    { time: '06:30', level: 'ALERT', event: 'Intel feed sync â€” 4 new entries'          },
     { time: '05:00', level: 'INFO',  event: 'Automated readiness check completed'      },
   ];
 
@@ -168,8 +188,8 @@ function OverviewPanel() {
         <div className="space-y-2">
           {log.map((entry, i) => (
             <div key={i} className="flex items-start gap-3 text-[10px]">
-              <span className="w-10 flex-shrink-0 text-slate-600">{entry.time}</span>
-              <span className={`flex-shrink-0 ${levelColor[entry.level]}`}>[{entry.level}]</span>
+              <span className="w-10 shrink-0 text-slate-600">{entry.time}</span>
+              <span className={`shrink-0 ${levelColor[entry.level]}`}>[{entry.level}]</span>
               <span className="text-slate-400">{entry.event}</span>
             </div>
           ))}
@@ -179,7 +199,7 @@ function OverviewPanel() {
   );
 }
 
-/* ── Personnel ── */
+/* â”€â”€ Personnel â”€â”€ */
 const PERSONNEL = [
   { id: 'LMS-001', name: 'Anderson, J.',  rank: 'Colonel',     unit: 'CMD',   status: 'ACTIVE',    clearance: 'TOP SECRET'  },
   { id: 'LMS-002', name: 'Carter, M.',    rank: 'Major',       unit: 'OPS',   status: 'DEPLOYED',  clearance: 'SECRET'      },
@@ -198,7 +218,10 @@ const STATUS_BADGE: Record<string, string> = {
 function PersonnelPanel() {
   return (
     <div className="space-y-4">
-      <PanelHeader eyebrow="Database" title="Personnel Records" />
+      <div className="mb-4 flex items-center justify-between">
+        <PanelHeader eyebrow="Database" title="Personnel Records" />
+        <Link href="/personnel" className="text-[9px] tracking-widest text-slate-600 uppercase transition hover:text-slate-400">View Full Database â†’</Link>
+      </div>
       <div className="overflow-hidden rounded border border-slate-800">
         <table className="w-full text-[10px]">
           <thead>
@@ -237,7 +260,7 @@ function PersonnelPanel() {
   );
 }
 
-/* ── Operations ── */
+/* â”€â”€ Operations â”€â”€ */
 function OperationsPanel() {
   const ops = [
     { id: 'OP-042', name: 'DAWNBREAKER', status: 'ACTIVE',    phase: 'Phase 2 / 4', unit: 'Alpha-7', start: '2026-08-01' },
@@ -253,7 +276,10 @@ function OperationsPanel() {
 
   return (
     <div className="space-y-4">
-      <PanelHeader eyebrow="Operations" title="Active Operations" />
+      <div className="mb-4 flex items-center justify-between">
+        <PanelHeader eyebrow="Operations" title="Active Operations" />
+        <Link href="/operations" className="text-[9px] tracking-widest text-slate-600 uppercase transition hover:text-slate-400">View Archive â†’</Link>
+      </div>
       <div className="space-y-3">
         {ops.map((op) => (
           <div key={op.id} className="rounded border border-slate-800 bg-slate-900/30 p-4">
@@ -280,13 +306,13 @@ function OperationsPanel() {
   );
 }
 
-/* ── Intel Feed ── */
+/* â”€â”€ Intel Feed â”€â”€ */
 function IntelPanel() {
   const items = [
-    { cls: 'SECRET',      title: 'Regional threat assessment — Sector 7',        time: '06:30' },
-    { cls: 'CONFIDENTIAL',title: 'Logistics route update — Northern corridor',   time: '05:12' },
-    { cls: 'SECRET',      title: 'Personnel movement report — Unit BRAVO-3',     time: '04:45' },
-    { cls: 'TOP SECRET',  title: '[REDACTED] — Full brief in secure terminal',   time: '02:00' },
+    { cls: 'SECRET',      title: 'Regional threat assessment â€” Sector 7',        time: '06:30' },
+    { cls: 'CONFIDENTIAL',title: 'Logistics route update â€” Northern corridor',   time: '05:12' },
+    { cls: 'SECRET',      title: 'Personnel movement report â€” Unit BRAVO-3',     time: '04:45' },
+    { cls: 'TOP SECRET',  title: '[REDACTED] â€” Full brief in secure terminal',   time: '02:00' },
   ];
 
   const clsColor: Record<string, string> = {
@@ -315,7 +341,7 @@ function IntelPanel() {
               </span>
               <p className="mt-1 text-[11px] text-slate-300">{item.title}</p>
             </div>
-            <span className="ml-4 flex-shrink-0 text-[9px] text-slate-600">{item.time}</span>
+            <span className="ml-4 shrink-0 text-[9px] text-slate-600">{item.time}</span>
           </div>
         ))}
       </div>
@@ -323,7 +349,7 @@ function IntelPanel() {
   );
 }
 
-/* ── Training ── */
+/* â”€â”€ Training â”€â”€ */
 function TrainingPanel() {
   const modules = [
     { code: 'TRN-101', name: 'Field Operations Protocol',   enrolled: 42, pct: 78 },
@@ -334,7 +360,10 @@ function TrainingPanel() {
 
   return (
     <div className="space-y-4">
-      <PanelHeader eyebrow="LMS" title="Training Modules" />
+      <div className="mb-4 flex items-center justify-between">
+        <PanelHeader eyebrow="LMS" title="Training Modules" />
+        <Link href="/training" className="text-[9px] tracking-widest text-slate-600 uppercase transition hover:text-slate-400">View Catalog â†’</Link>
+      </div>
       <div className="space-y-3">
         {modules.map((m) => (
           <div key={m.code} className="rounded border border-slate-800 bg-slate-900/30 p-4">

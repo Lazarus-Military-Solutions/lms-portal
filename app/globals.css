@@ -1,147 +1,184 @@
 @import "tailwindcss";
 
 :root {
-  --background: #060810;
-  --foreground: #e2e8f0;
-  --lms-green: #6b8f3f;
-  --lms-amber: #c8920a;
-  --lms-red: #b91c1c;
+  --background: #020617;
+  --foreground: #f8fafc;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-jetbrains-mono), var(--font-geist-mono), monospace;
+  --font-mono: var(--font-geist-mono);
 }
 
-* { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+}
 
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+}
 
 body {
   margin: 0;
   min-height: 100vh;
   background: var(--background);
   color: var(--foreground);
+  font-family: var(--font-sans), system-ui, sans-serif;
 }
 
-a { color: inherit; text-decoration: none; }
-
-/* ── Blast door CSS keyframes ── */
-
-@keyframes cursor-blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
+/* corporate section transitions */
+.reveal-hidden {
+  opacity: 0;
+  transform: translateY(24px);
+}
+.reveal-visible {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.7s ease, transform 0.7s ease;
 }
 
-@keyframes warning-flash {
-  0%, 100% { opacity: 0.15; box-shadow: none; }
-  50% { opacity: 1; box-shadow: 0 0 18px rgba(200, 100, 0, 0.9); }
+/* remove default focus ring on elements that have custom styling */
+input:focus, textarea:focus, select:focus {
+  outline: none;
 }
 
-@keyframes warning-flash-slow {
-  0%, 100% { opacity: 0.2; }
-  50% { opacity: 0.8; }
+a {
+  color: inherit;
+  text-decoration: none;
 }
 
-@keyframes door-open-left {
-  0%   { transform: translateX(0); }
-  100% { transform: translateX(-101%); }
+.intro-frame-glitch {
+  position: relative;
+  display: inline-block;
+  line-height: 1;
+  letter-spacing: 0.03em;
+  animation: intro-glitch-main 1.35s ease-out both;
 }
 
-@keyframes door-open-right {
-  0%   { transform: translateX(0); }
-  100% { transform: translateX(101%); }
-}
-
-/* lock bolts retract away from the seam */
-@keyframes lock-retract-l {
-  0%   { transform: scaleX(1); }
-  100% { transform: scaleX(0); }
-}
-
-@keyframes lock-retract-r {
-  0%   { transform: scaleX(1); }
-  100% { transform: scaleX(0); }
-}
-
-@keyframes piston-extend {
-  0%   { height: 32%; }
-  100% { height: 62%; }
-}
-
-@keyframes interior-reveal {
-  0%   { opacity: 0; }
-  100% { opacity: 1; }
-}
-
-@keyframes screen-shake {
-  0%, 100% { transform: translate(0, 0); }
-  10%  { transform: translate(-6px, 3px); }
-  20%  { transform: translate(6px, -3px); }
-  30%  { transform: translate(-5px, 2px); }
-  40%  { transform: translate(5px, -2px); }
-  55%  { transform: translate(-3px, 1px); }
-  70%  { transform: translate(3px, -1px); }
-  85%  { transform: translate(-1px, 0); }
-}
-
-@keyframes fade-up {
-  from { opacity: 0; transform: translateY(6px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes scanline-drift {
-  from { background-position: 0 0; }
-  to   { background-position: 0 100vh; }
-}
-
-/* ── Utility animation classes ── */
-
-.animate-cursor-blink  { animation: cursor-blink 0.8s step-end infinite; }
-.animate-warning-flash { animation: warning-flash 1.0s ease-in-out infinite; }
-.animate-warning-slow  { animation: warning-flash-slow 2.5s ease-in-out infinite; }
-
-.animate-door-open-left  { animation: door-open-left  3.0s cubic-bezier(0.35, 0, 0.25, 1) forwards; }
-.animate-door-open-right { animation: door-open-right 3.0s cubic-bezier(0.35, 0, 0.25, 1) forwards; }
-
-.animate-lock-l { animation: lock-retract-l 0.55s ease-in forwards; transform-origin: right center; }
-.animate-lock-r { animation: lock-retract-r 0.55s ease-in forwards; transform-origin: left  center; }
-
-.animate-piston-extend { animation: piston-extend 0.9s ease-out forwards; }
-.animate-interior      { animation: interior-reveal 1.2s ease-in forwards; }
-.animate-screen-shake  { animation: screen-shake 0.55s ease-in-out; }
-.animate-fade-up       { animation: fade-up 0.25s ease-out forwards; }
-
-/* ── Scanlines overlay ── */
-.scanlines {
-  background-image: repeating-linear-gradient(
-    0deg,
-    transparent 0px,
-    transparent 2px,
-    rgba(0, 0, 0, 0.07) 2px,
-    rgba(0, 0, 0, 0.07) 3px
-  );
+.intro-frame-glitch::before,
+.intro-frame-glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
   pointer-events: none;
 }
 
-/* ── Custom scrollbar ── */
-::-webkit-scrollbar          { width: 5px; }
-::-webkit-scrollbar-track    { background: #0a0d14; }
-::-webkit-scrollbar-thumb    { background: #2a2e38; border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: #3a3e4a; }
+.intro-frame-glitch::before {
+  color: rgba(255, 65, 65, 0.8);
+  transform: translate(0, 0);
+  clip-path: polygon(0 0, 100% 0, 100% 46%, 0 46%);
+  animation: intro-glitch-top 1s ease-out both;
+}
 
-/* ── Reduced-motion overrides ── */
+.intro-frame-glitch::after {
+  color: rgba(70, 210, 255, 0.7);
+  transform: translate(0, 0);
+  clip-path: polygon(0 56%, 100% 56%, 100% 100%, 0 100%);
+  animation: intro-glitch-bottom 1.1s ease-out both;
+}
+
+@keyframes intro-glitch-main {
+  0% { opacity: 0; transform: translateY(12px); }
+  45% { opacity: 1; transform: translateY(0); }
+  52% { transform: translateX(-2px); }
+  60% { transform: translateX(2px); }
+  72% { transform: translateX(0); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes intro-glitch-top {
+  0% { opacity: 0; transform: translate(0, 0); }
+  28% { opacity: 0.95; transform: translate(-3px, -1px); }
+  42% { opacity: 0.65; transform: translate(3px, 1px); }
+  58% { opacity: 0.3; transform: translate(-1px, 0); }
+  74% { opacity: 0; transform: translate(0, 0); }
+  100% { opacity: 0; transform: translate(0, 0); }
+}
+
+@keyframes intro-glitch-bottom {
+  0% { opacity: 0; transform: translate(0, 0); }
+  24% { opacity: 0.95; transform: translate(3px, 1px); }
+  40% { opacity: 0.55; transform: translate(-3px, -1px); }
+  56% { opacity: 0.2; transform: translate(1px, 0); }
+  70% { opacity: 0; transform: translate(0, 0); }
+  100% { opacity: 0; transform: translate(0, 0); }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .animate-door-open-left,
-  .animate-door-open-right,
-  .animate-lock-l,
-  .animate-lock-r,
-  .animate-piston-extend,
-  .animate-screen-shake,
-  .animate-warning-flash,
-  .animate-warning-slow {
-    animation-duration: 0.01ms !important;
+  .intro-frame-glitch,
+  .intro-frame-glitch::before,
+  .intro-frame-glitch::after {
+    animation: none;
   }
 }
+
+.stat-panel {
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-panel::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -34%;
+  width: 28%;
+  background: linear-gradient(90deg, rgba(85, 107, 47, 0), rgba(85, 107, 47, 0.16), rgba(85, 107, 47, 0));
+  transform: skewX(-18deg);
+  animation: stat-scan 1.9s ease-out both;
+}
+
+@keyframes stat-scan {
+  0% { left: -34%; }
+  100% { left: 122%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stat-panel::after {
+    animation: none;
+  }
+}
+
+.digital-intro {
+  position: relative;
+}
+
+.digital-intro-run {
+  animation: digital-intro-reveal 0.8s ease both;
+}
+
+.opacity-100 .digital-intro {
+  animation: digital-intro-reveal 0.8s ease both;
+}
+
+@keyframes digital-intro-reveal {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+    filter: blur(2px);
+    text-shadow: 0 0 0 rgba(255, 255, 255, 0);
+  }
+  45% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+    text-shadow: -2px 0 rgba(255, 64, 64, 0.45), 2px 0 rgba(64, 205, 255, 0.45);
+  }
+  56% {
+    transform: translateX(-1px);
+  }
+  66% {
+    transform: translateX(1px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+    text-shadow: 0 0 0 rgba(255, 255, 255, 0);
+  }
+}
+

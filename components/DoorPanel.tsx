@@ -48,7 +48,7 @@ export function DoorPanel({ side, isOpen }: DoorPanelProps) {
         {RIVET_POSITIONS.map((pos, i) => (
           <div
             key={i}
-            className="absolute h-3 w-3 rounded-full border border-slate-600/60 bg-gradient-to-br from-slate-600 to-slate-800 shadow-inner"
+            className="absolute h-3 w-3 rounded-full border border-slate-600/60 bg-linear-to-br from-slate-600 to-slate-800 shadow-inner"
             style={{ ...pos, transform: 'translate(-50%, -50%)' }}
           />
         ))}

@@ -9,6 +9,7 @@ import { colors, glass, typography } from "../ui/design-tokens";
 import { Navbar } from "../ui/navbar";
 import { Sidebar } from "../ui/sidebar";
 import { PageContainer } from "../ui/page-container";
+import { BrandLogo } from "@/components/BrandLogo";
 
 const navigation = [
   { name: "Dashboard", href: "/dashboard", icon: "◉" },
@@ -29,7 +30,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,_rgba(85,107,47,0.2),_transparent_35%),linear-gradient(135deg,_#020617_0%,_#0f172a_50%,_#111827_100%)] text-slate-100">
+    <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,rgba(85,107,47,0.2),transparent_35%),linear-gradient(135deg,#020617_0%,#0f172a_50%,#111827_100%)] text-slate-100">
       <div className={`mx-auto flex min-h-screen max-w-7xl flex-col ${colors.background} ${colors.surface} ${colors.textPrimary}`}>
         <Navbar
           leftContent={
@@ -43,9 +44,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 ☰
               </button>
               <div>
-                <p className={`${typography.label} text-[#556B2F]`}>
-                  Lazarus Military Solutions
-                </p>
+                <BrandLogo href="/" imageClassName="h-6 w-auto" />
                 <h1 className={`${typography.heading} text-white`}>LMS Portal</h1>
               </div>
             </>

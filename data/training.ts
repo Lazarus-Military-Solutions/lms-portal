@@ -1,162 +1,189 @@
-export type TrainingStatus = 'COMPLETED' | 'IN PROGRESS' | 'SCHEDULED' | 'FAILED' | 'WAIVED';
-
-export interface TrainingCourse {
-  id: string;
-  name: string;
-  category: string;
-  duration: string;
-  description: string;
-  enrolled: number;
-  completionRate: number;
-}
+// LMS Training Database
+export type TrainingStatus = 'COMPLETED' | 'IN_PROGRESS' | 'NOT_STARTED' | 'PENDING' | 'FAILED';
+export type TrainingCategory =
+  | 'BMT'
+  | 'RECRUIT_ORIENTATION'
+  | 'MEDICAL_TRAINING'
+  | 'OFFICER_TRAINING'
+  | 'CQB'
+  | 'AVIATION'
+  | 'FIELD_OPERATIONS'
+  | 'SPECIALIZED';
 
 export interface TrainingRecord {
-  id: string;
-  course: string;
-  category: string;
+  courseId: string;
+  name: string;
+  category: TrainingCategory;
   status: TrainingStatus;
   instructor: string;
   startDate: string;
   endDate?: string;
   score?: number;
-  qualification: string;
-  location: string;
-  classification: string;
+  qualification?: string;
+  duration: string; // e.g., "4 weeks"
+  description: string;
+  prerequisite?: string;
 }
 
-export const trainingCourses: TrainingCourse[] = [
+export const TRAINING_COURSES: TrainingRecord[] = [
   {
-    id: 'TRN-BMT-001',
+    courseId: 'BMT-001',
     name: 'Basic Military Training',
     category: 'BMT',
-    duration: '12 weeks',
-    description: 'Foundation training covering basic military skills, physical conditioning, LMS discipline standards, and doctrine. Mandatory for all recruits.',
-    enrolled: 142,
-    completionRate: 74,
+    status: 'COMPLETED',
+    instructor: 'Sergeant Major Collins',
+    startDate: '2022-01-10',
+    endDate: '2022-03-15',
+    score: 94,
+    qualification: 'BMT Certificate',
+    duration: '10 weeks',
+    description:
+      'Foundational military training covering marksmanship, physical conditioning, tactical movement, and basic combat skills.',
   },
   {
-    id: 'TRN-RO-001',
-    name: 'Recruit Orientation Program',
-    category: 'RECRUIT ORIENTATION',
+    courseId: 'ROE-001',
+    name: 'Recruit Orientation & Ethics',
+    category: 'RECRUIT_ORIENTATION',
+    status: 'COMPLETED',
+    instructor: 'Colonel Anderson',
+    startDate: '2022-03-18',
+    endDate: '2022-03-29',
+    score: 89,
+    qualification: 'Orientation Certificate',
     duration: '2 weeks',
-    description: 'Introduction to LMS culture, organizational structure, regulations, and the database portal system. Prerequisite to BMT.',
-    enrolled: 178,
-    completionRate: 96,
+    description:
+      'Introduction to LMS operations, organizational structure, ethical guidelines, and operational procedures.',
+    prerequisite: 'BMT-001',
   },
   {
-    id: 'TRN-MED-001',
-    name: 'Combat Medicine Basics',
-    category: 'MEDICAL TRAINING',
-    duration: '4 weeks',
-    description: 'Basic trauma care, hemorrhage control, and combat medicine protocols. Mandatory for all field-assigned personnel.',
-    enrolled: 89,
-    completionRate: 88,
-  },
-  {
-    id: 'TRN-CQB-001',
-    name: 'Close Quarters Battle',
+    courseId: 'CQB-101',
+    name: 'Close Quarter Battle Fundamentals',
     category: 'CQB',
-    duration: '6 weeks',
-    description: 'Advanced CQB techniques, room clearing, shoot/no-shoot decision-making, and close-range weapons proficiency.',
-    enrolled: 56,
-    completionRate: 68,
+    status: 'COMPLETED',
+    instructor: 'Captain Harrison',
+    startDate: '2022-04-05',
+    endDate: '2022-06-10',
+    score: 97,
+    qualification: 'CQB Level 1',
+    duration: '10 weeks',
+    description:
+      'Advanced hand-to-hand combat, weapon retention, and tactical unarmed defense for operational personnel.',
+    prerequisite: 'BMT-001',
   },
   {
-    id: 'TRN-AV-001',
-    name: 'Aviation Orientation',
+    courseId: 'FO-201',
+    name: 'Field Operations Core',
+    category: 'FIELD_OPERATIONS',
+    status: 'IN_PROGRESS',
+    instructor: 'Major Carter',
+    startDate: '2028-07-15',
+    endDate: undefined,
+    score: undefined,
+    qualification: undefined,
+    duration: '12 weeks',
+    description:
+      'Tactical field operations, squad dynamics, mission planning, and advanced combat scenarios. Ongoing.',
+    prerequisite: 'CQB-101',
+  },
+  {
+    courseId: 'MED-150',
+    name: 'Field Trauma Medicine',
+    category: 'MEDICAL_TRAINING',
+    status: 'COMPLETED',
+    instructor: 'Dr. Rachel Moore',
+    startDate: '2024-02-10',
+    endDate: '2024-04-20',
+    score: 92,
+    qualification: 'Combat Medic',
+    duration: '10 weeks',
+    description: 'Battlefield trauma assessment, emergency triage, and field medical procedures.',
+    prerequisite: 'BMT-001',
+  },
+  {
+    courseId: 'AVN-301',
+    name: 'Rotary Wing Flight Operations',
     category: 'AVIATION',
-    duration: '3 weeks',
-    description: 'Aviation safety, crew coordination, and air operations fundamentals for ground crew and support personnel.',
-    enrolled: 31,
-    completionRate: 92,
+    status: 'COMPLETED',
+    instructor: 'Captain Williams',
+    startDate: '2021-09-12',
+    endDate: '2022-02-18',
+    score: 96,
+    qualification: 'Rotary Wing Pilot',
+    duration: '24 weeks',
+    description:
+      'Helicopter flight operations, tactical insertions, emergency procedures, and combat flying techniques.',
+    prerequisite: 'BMT-001',
   },
   {
-    id: 'TRN-FO-001',
-    name: 'Field Operations Course',
-    category: 'FIELD OPERATIONS',
-    duration: '8 weeks',
-    description: 'Advanced field operations including land navigation, terrain analysis, patrol, survival, and operational planning.',
-    enrolled: 73,
-    completionRate: 71,
-  },
-  {
-    id: 'TRN-OFF-001',
-    name: 'Officer Training Program',
-    category: 'OFFICER TRAINING',
+    courseId: 'OFF-401',
+    name: 'Officer Leadership & Command',
+    category: 'OFFICER_TRAINING',
+    status: 'COMPLETED',
+    instructor: 'Colonel Anderson',
+    startDate: '2019-06-01',
+    endDate: '2019-09-15',
+    score: 95,
+    qualification: 'Officer Commission',
     duration: '16 weeks',
-    description: 'Leadership, command authority, advanced tactical planning, and administrative management for officer candidates.',
-    enrolled: 22,
-    completionRate: 59,
+    description:
+      'Officer-level training covering command structure, strategic decision-making, personnel management, and mission coordination.',
+    prerequisite: 'CQB-101, FO-201',
   },
   {
-    id: 'TRN-SPEC-001',
-    name: 'Special Operations Selection',
-    category: 'SPECIALIZED QUALIFICATIONS',
-    duration: '4 weeks',
-    description: 'Grueling selection course for LMS Special Warfare. Tests physical and psychological limits. Historical pass rate: 31%.',
-    enrolled: 16,
-    completionRate: 31,
+    courseId: 'SPC-500',
+    name: 'Advanced Reconnaissance & Surveillance',
+    category: 'SPECIALIZED',
+    status: 'PENDING',
+    instructor: 'Captain Marcus Reeves',
+    startDate: '2028-09-01',
+    endDate: undefined,
+    score: undefined,
+    qualification: undefined,
+    duration: '8 weeks',
+    description:
+      'Specialized training in advanced reconnaissance techniques, surveillance operations, and infiltration procedures.',
+    prerequisite: 'FO-201, CQB-101',
+  },
+  {
+    courseId: 'INT-250',
+    name: 'Intelligence Analysis Fundamentals',
+    category: 'SPECIALIZED',
+    status: 'COMPLETED',
+    instructor: 'Captain Emily Richardson',
+    startDate: '2023-05-10',
+    endDate: '2023-07-22',
+    score: 91,
+    qualification: 'Intelligence Analyst',
+    duration: '12 weeks',
+    description:
+      'Intelligence gathering, data analysis, threat assessment, and operational intelligence preparation.',
+    prerequisite: 'ROE-001',
+  },
+  {
+    courseId: 'CYB-300',
+    name: 'Cyber Security Operations',
+    category: 'SPECIALIZED',
+    status: 'NOT_STARTED',
+    instructor: 'Dr. James Chen',
+    startDate: '2028-10-15',
+    endDate: undefined,
+    score: undefined,
+    qualification: undefined,
+    duration: '14 weeks',
+    description:
+      'Network security, cyber threat assessment, system hardening, and digital defense operations. Scheduled to start.',
+    prerequisite: 'INT-250',
   },
 ];
 
-export const recentRecords: TrainingRecord[] = [
-  {
-    id: 'REC-2028-001',
-    course: 'Basic Military Training',
-    category: 'BMT',
-    status: 'COMPLETED',
-    instructor: 'MSGT Harmon, D.',
-    startDate: '2028-01-06',
-    endDate: '2028-03-29',
-    score: 84,
-    qualification: 'LMS Basic Combat Qualification',
-    location: 'LMS Training Center Alpha',
-    classification: 'INTERNAL',
-  },
-  {
-    id: 'REC-2028-002',
-    course: 'Field Operations Course',
-    category: 'FIELD OPERATIONS',
-    status: 'IN PROGRESS',
-    instructor: 'CPT Brooks, A.',
-    startDate: '2028-07-01',
-    qualification: 'LMS Field Operator Qualification',
-    location: 'LMS Training Center Alpha',
-    classification: 'INTERNAL',
-  },
-  {
-    id: 'REC-2028-003',
-    course: 'Close Quarters Battle',
-    category: 'CQB',
-    status: 'COMPLETED',
-    instructor: 'SSG Reeves, M. (SHADOW)',
-    startDate: '2028-04-08',
-    endDate: '2028-05-17',
-    score: 91,
-    qualification: 'CQB Operator Certification',
-    location: 'LMS Training Center Bravo',
-    classification: 'INTERNAL',
-  },
-  {
-    id: 'REC-2028-004',
-    course: 'Officer Training Program',
-    category: 'OFFICER TRAINING',
-    status: 'IN PROGRESS',
-    instructor: 'MAJ Chen, L.',
-    startDate: '2028-05-01',
-    qualification: 'LMS Officer Commission',
-    location: 'LMS Command Training Facility',
-    classification: 'INTERNAL',
-  },
-  {
-    id: 'REC-2028-005',
-    course: 'Special Operations Selection',
-    category: 'SPECIALIZED QUALIFICATIONS',
-    status: 'SCHEDULED',
-    instructor: 'CLASSIFIED',
-    startDate: '2028-09-15',
-    qualification: 'Special Warfare Qualification',
-    location: 'CLASSIFIED',
-    classification: 'RESTRICTED',
-  },
-];
+export const TRAINING_STATISTICS = {
+  totalCourses: TRAINING_COURSES.length,
+  completedCourses: TRAINING_COURSES.filter((c) => c.status === 'COMPLETED').length,
+  inProgressCourses: TRAINING_COURSES.filter((c) => c.status === 'IN_PROGRESS').length,
+  pendingCourses: TRAINING_COURSES.filter((c) => c.status === 'PENDING').length,
+  averageScore:
+    Math.round(
+      TRAINING_COURSES.filter((c) => c.score)
+        .reduce((sum, c) => sum + (c.score || 0), 0) / TRAINING_COURSES.filter((c) => c.score).length
+    ) || 0,
+};

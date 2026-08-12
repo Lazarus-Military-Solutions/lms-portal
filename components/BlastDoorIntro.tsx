@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { DoorPanel } from './DoorPanel';
+import { playSound } from '@/lib/audio';
 
 interface BlastDoorIntroProps {
   onComplete: () => void;
@@ -11,14 +12,14 @@ interface BlastDoorIntroProps {
 type Phase = 'booting' | 'granted' | 'opening' | 'fading';
 
 const BOOT_LINES = [
-  { text: 'LAZARUS MILITARY SOLUTIONS — NODE v4.2.1', dim: false },
-  { text: 'BIOS integrity check ............... OK', dim: true },
-  { text: 'Loading kernel modules ............. OK', dim: true },
-  { text: 'Encryption layer AES-256 ........... OK', dim: true },
-  { text: 'Establishing secure channel ........ OK', dim: true },
-  { text: 'Biometric verification ............. PASS', dim: true },
-  { text: 'Clearance level DELTA .............. CONFIRMED', dim: true },
-  { text: 'ACCESS GRANTED', dim: false },
+  { text: 'LAZARUS MILITARY SOLUTIONS — CORPORATE NETWORK NODE v4.2.1', dim: false },
+  { text: 'Initializing secure connection ............. OK',              dim: true  },
+  { text: 'Verifying SSL certificate chain ........... OK',              dim: true  },
+  { text: 'Authentication layer AES-256 .............. OK',              dim: true  },
+  { text: 'Loading LMS operational database .......... OK',              dim: true  },
+  { text: 'Establishing corporate network bridge ..... OK',              dim: true  },
+  { text: 'Clearance level DELTA ..................... CONFIRMED',        dim: true  },
+  { text: 'ACCESS GRANTED',                                              dim: false },
 ];
 
 export function BlastDoorIntro({ onComplete }: BlastDoorIntroProps) {
@@ -59,13 +60,15 @@ export function BlastDoorIntro({ onComplete }: BlastDoorIntroProps) {
     };
   }, [advance]);
 
-  // try to play a sound when doors open — silently skips if file is absent
+  // use audio module (silently skips if files absent)
   useEffect(() => {
     if (!doorsOpen) return;
-    const audio = new Audio('/sounds/blast-door-open.mp3');
-    audio.volume = 0.35;
-    audio.play().catch(() => {});
+    playSound('intro/door-open', 0.5);
   }, [doorsOpen]);
+
+  useEffect(() => {
+    if (phase === 'granted') playSound('intro/authenticate', 0.4);
+  }, [phase]);
 
   return (
     <motion.div
@@ -74,6 +77,22 @@ export function BlastDoorIntro({ onComplete }: BlastDoorIntroProps) {
       transition={{ duration: 0.6 }}
       style={{ background: '#050709' }}
     >
+      <div className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center overflow-hidden">
+        <motion.video
+          src="/images/lazarus-logo-animation.mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
+          aria-label="LMS logo animation"
+          className="h-auto max-h-[34vh] w-[min(42vw,420px)] object-contain opacity-60"
+          animate={{
+            opacity: phase === 'opening' ? 0.62 : phase === 'fading' ? 0.15 : 0,
+            scale: phase === 'opening' ? 1.03 : 0.96,
+          }}
+          transition={{ duration: 0.5, ease: 'easeOut' }}
+        />
+      </div>
       <DoorPanel side="left" isOpen={doorsOpen} />
       <DoorPanel side="right" isOpen={doorsOpen} />
 
@@ -90,17 +109,30 @@ export function BlastDoorIntro({ onComplete }: BlastDoorIntroProps) {
         )}
       </AnimatePresence>
 
+      {/* white bloom — cinematic door → corporate website transition */}
+      <AnimatePresence>
+        {phase === 'fading' && (
+          <motion.div
+            className="absolute inset-0 z-30 pointer-events-none"
+            style={{ background: 'white' }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: [0, 0.55, 0] }}
+            transition={{ duration: 0.9, times: [0, 0.25, 1] }}
+          />
+        )}
+      </AnimatePresence>
+
       {/* boot terminal */}
       <AnimatePresence mode="wait">
         {phase === 'booting' && (
           <motion.div
             key="boot"
-            className="relative z-20 w-full max-w-md px-10 font-mono"
+            className="relative z-20 w-full max-w-md px-10 font-mono pt-12"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0, transition: { duration: 0.15 } }}
           >
-            <div className="space-y-[5px]">
+            <div className="space-y-1.25">
               {BOOT_LINES.slice(0, visibleLines).map((line, i) => (
                 <motion.p
                   key={i}
@@ -122,7 +154,7 @@ export function BlastDoorIntro({ onComplete }: BlastDoorIntroProps) {
                 </motion.p>
               ))}
               {visibleLines < BOOT_LINES.length && (
-                <span className="inline-block mt-1 h-[13px] w-[7px] bg-emerald-500/80 animate-pulse" />
+                <span className="inline-block mt-1 h-3.25 w-1.75 bg-emerald-500/80 animate-pulse" />
               )}
             </div>
           </motion.div>
@@ -131,20 +163,42 @@ export function BlastDoorIntro({ onComplete }: BlastDoorIntroProps) {
         {(phase === 'granted' || phase === 'opening') && (
           <motion.div
             key="granted"
-            className="relative z-20 text-center font-mono"
+            className="relative z-20 mx-6 w-full max-w-140 border border-emerald-500/30 bg-black/65 p-6 text-center font-mono shadow-[0_0_40px_rgba(16,185,129,0.12)]"
             initial={{ opacity: 0, scale: 0.96 }}
-            animate={{ opacity: 1, scale: 1 }}
+            animate={
+              phase === 'opening'
+                ? {
+                    opacity: 0,
+                    scale: 0.94,
+                    y: -8,
+                    clipPath: 'inset(0 0 100% 0)',
+                  }
+                : {
+                    opacity: 1,
+                    scale: 1,
+                    y: 0,
+                    clipPath: 'inset(0 0 0% 0)',
+                  }
+            }
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.25 }}
+            transition={{ duration: 0.45, ease: [0.19, 1, 0.22, 1] }}
           >
-            <p className="text-[9px] tracking-[0.55em] text-emerald-800 uppercase">Clearance Level Delta</p>
+            <div
+              className="pointer-events-none absolute inset-0 opacity-[0.16]"
+              style={{
+                backgroundImage:
+                  'repeating-linear-gradient(0deg, rgba(16,185,129,0.28), rgba(16,185,129,0.28) 1px, transparent 1px, transparent 4px)',
+              }}
+            />
+            <p className="relative text-[9px] tracking-[0.55em] text-emerald-800 uppercase">Clearance Level Delta</p>
             <p
-              className="mt-2 text-[32px] font-black tracking-[0.28em] text-emerald-400 uppercase leading-none"
+              className="intro-frame-glitch relative mt-2 text-[32px] font-black tracking-[0.28em] text-emerald-400 uppercase leading-none"
+              data-text="Access Granted"
               style={{ textShadow: '0 0 40px rgba(52,211,153,0.5)' }}
             >
               Access Granted
             </p>
-            <p className="mt-3 text-[8px] tracking-[0.5em] text-slate-700 uppercase">
+            <p className="relative mt-3 text-[8px] tracking-[0.5em] text-slate-600 uppercase">
               Initializing secure portal
             </p>
           </motion.div>
